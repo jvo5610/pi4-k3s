@@ -12,8 +12,6 @@ for row in $(curl "https://api.github.com/users/$4/keys" | jq '.[] | .key')
     echo $row | tr -d '"' | tr -d "\n" | sed 's/ssh-rsa/\nssh-rsa /g' >> /home/pi/.ssh/authorized_keys
     done
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sudo cat /etc/hostname | sed "s/raspberrypi/$5/g" > /etc/hostname
-sudo cat /etc/hosts | sed "s/raspberrypi/$5/g" > /etc/hosts
 curl -s https://install.zerotier.com | sudo bash
 sudo zerotier-cli join $2
 sleep 5
