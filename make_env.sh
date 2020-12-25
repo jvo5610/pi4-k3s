@@ -5,6 +5,8 @@
 # 4rd argument = github username
 # 5th argument = hostname
 apt install -y curl jq
+sed -i "s/raspberrypi/$5/g" /etc/hosts
+sed -i "s/raspberrypi/$5/g" /etc/hostname
 echo -e "interface wlan0\nstatic ip_address=$1\nstatic routers=192.168.1.1\nstatic domain_name_servers=186.183.22.1" >> /etc/dhcpcd.conf
 sudo -u pi ssh-keygen -t rsa -N ''
 for row in $(curl "https://api.github.com/users/$4/keys" | jq '.[] | .key')
