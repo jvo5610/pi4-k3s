@@ -6,7 +6,7 @@
   tasks:
   - name: Set hostname
     hostname:
-      name: "{{ HOSTNAME }}{{ groups['k3s.nodes_config'].index(inventory_hostname) | int + 1 }}"
+      name: "{{ NODES_HOSTNAME }}{{ groups['k3s.nodes_config'].index(inventory_hostname) | int + 1 }}"
   
   - name: Generate SSH key
     openssh_keypair:
