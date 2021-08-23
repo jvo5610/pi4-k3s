@@ -1,0 +1,10 @@
+- hosts: k3s.dataend
+  become: true
+  vars_files:
+    - variables.yaml
+
+  tasks:
+  - name: "update hostnames"
+    hostname:
+      name: "{{ HOSTNAME }}{{ groups['k3s.dataend'].index(inventory_hostname) | int + 1 }}"
+

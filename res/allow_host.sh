@@ -1,0 +1,1 @@
+curl -X POST "https://my.zerotier.com/api/network/$1/member/$(zerotier-cli info | cut -d " " -f 3)" -H "Content-Type: application/json" -H "Authorization: bearer $2" -d "{\"config\": {\"authorized\": true, \"name\": \"$(hostname)\"}  }"
