@@ -4,7 +4,48 @@
     - variables.yaml
 
   tasks:
-  - name: "update hostnames"
-    hostname:
-      name: "{{ HOSTNAME }}{{ groups['k3s.dataend'].index(inventory_hostname) | int + 1 }}"
+    - name: Set up ENV
+      apt:
+        name:
+          - mariadb
+        state: present
+        update_cache: true
 
+    - name: Ensure MySQL is enabled to run on startup
+      service:
+        name: mariadb
+        state: started
+        enabled: true
+
+    - name: Update MySQL root password for all root accounts
+      mysql_user:
+        name: root
+        host: "{{ item }}"
+        #password: "{{ DB_ROOT_PASS }}"
+        login_user: root
+        login_password: "{{ DB_ROOT_PASS }}"
+        check_implicit_admin: yes
+        priv: "*.*:ALL,GRANT"
+      with_items:
+        - "{{ DATAEND_HOSTNAME }}"
+        - 127.0.0.1
+        - ::1
+        - localhost
+
+    - name: Create k3s database
+      mysql_db:
+        name: "{{ DB_NAME }}"
+        state: present
+        login_user: root
+        login_password: "{{ DB_ROOT_PASS }}"
+
+    - name: "Create Rancher user"
+      mysql_user:
+        name: "{{ DB_USER }}"
+        password: "{{ DB_PASS }}"
+        host: "{{ DATAEND_HOSTNAME }}"
+        state: present
+        update_password: on_create
+        priv: "{{ DB_NAME }}.*:ALL"
+        login_user: root
+        login_password: "{{ DB_ROOT_PASS }}"

@@ -3,19 +3,19 @@
   vars_files:
     - variables.yaml
 
-  tasks:  
-  - name: Install Zerotier
-    shell: curl -s https://install.zerotier.com | sudo bash
+  tasks:
+    - name: Install Zerotier
+      shell: curl -s https://install.zerotier.com | sudo bash
 
-  - name: Join Zerotier network
-    shell: zerotier-cli join {{ ZEROTIER_NETWORK_ID }}
+    - name: Join Zerotier network
+      shell: zerotier-cli join {{ ZEROTIER_NETWORK_ID }}
 
-  - name: Wait to Zerotier Network join
-    pause:
-      seconds: 5
+    - name: Wait to Zerotier Network join
+      pause:
+        seconds: 5
 
-  - name: Allow Host on Zerotier
-    script: ./res/allow_host.sh {{ ZEROTIER_NETWORK_ID }} {{ ZEROTIER_TOKEN }}
+    - name: Allow Host on Zerotier
+      script: ./res/allow_host.sh {{ ZEROTIER_NETWORK_ID }} {{ ZEROTIER_TOKEN }}
 
-  - name: Join Zerotier network
-    shell: curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="mysql://{{ DB_USER }}:{{ DB_PASS }}@tcp({{ DB_HOST }}:3306)/{{ DB_NAME }}"
+    - name: Deploy k3s
+      shell: curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="mysql://{{ DB_USER }}:{{ DB_PASS }}@tcp({{ DB_HOST }}:3306)/{{ DB_NAME }}"
