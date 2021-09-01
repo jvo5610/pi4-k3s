@@ -49,7 +49,7 @@
         host: "{{ item }}"
         password: "{{ DB_PASS }}"
         login_user: root
-        #login_password: "{{ DB_PASS }}"
+        login_password: "{{ DB_PASS }}"
         check_implicit_admin: yes
         priv: "*.*:ALL,GRANT"
       with_items:

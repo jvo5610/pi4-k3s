@@ -3,8 +3,10 @@
 10.0.0.248
 
 [k3s.nodes]
-10.0.0.150
 10.0.0.151
+
+[k3s.control_plane]
+10.0.0.150
 
 [k3s.dataend_config]
 10.0.0.251
@@ -23,6 +25,10 @@ ansible_ssh_pass=raspberry
 ansible_python_interpreter=/usr/bin/python3
 
 [k3s.nodes:vars]
+ansible_user=pi
+ansible_python_interpreter=/usr/bin/python3
+
+[k3s.control_plane:vars]
 ansible_user=pi
 ansible_python_interpreter=/usr/bin/python3
 

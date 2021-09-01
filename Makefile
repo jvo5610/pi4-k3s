@@ -2,8 +2,10 @@ help:
 	@echo "First check Environment vars"
 	@echo "make env"
 	
-config:
+config_dataend:
 	ansible-playbook config_dataend.yaml
+
+config_nodes:
 	ansible-playbook config_nodes.yaml
 
 deploy:

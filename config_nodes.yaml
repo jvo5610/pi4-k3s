@@ -15,7 +15,6 @@
       community.general.timezone:
         name: America/Argentina/Buenos_Aires
 
-
     - name: Creates .ssh
       file:
         path: /home/pi/.ssh/
