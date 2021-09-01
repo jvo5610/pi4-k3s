@@ -2,9 +2,10 @@ help:
 	@echo "First check Environment vars"
 	@echo "make env"
 	
-env:
-	./make_env.sh $(FIXED_IP) $(ZEROTIER_VPC_ID) $(ZEROTIER_TOKEN) $(GITHUB_USERNAME) $(HOSTNAME)
+config:
+	ansible-playbook config_dataend.yaml
+	ansible-playbook config_nodes.yaml
 
-ENV=./Environment
-SHELL := /bin/bash
-include $(ENV)
+deploy:
+	ansible-playbook deploy_dataend.yaml
+	ansible-playbook deploy_nodes.yaml

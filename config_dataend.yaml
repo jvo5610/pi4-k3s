@@ -8,13 +8,25 @@
       hostname:
         name: "{{ DATAEND_HOSTNAME }}"
 
+    - name: Update /etc/hosts
+      shell: sed -i "s/raspberrypi/$(hostname)/g" /etc/hosts
+
+    - name: Set timezone to America/Argentina/Buenos_Aires
+      community.general.timezone:
+        name: America/Argentina/Buenos_Aires
+
+    - name: Creates .ssh
+      file:
+        path: /home/pi/.ssh/
+        state: directory
+
     - name: Generate SSH key
       openssh_keypair:
-        path: "~/.ssh/id_rsa"
+        path: "/home/pi/.ssh/id_rsa"
         type: rsa
         size: 4096
         state: present
-        force: no
+        force: yes
 
     - name: Set up ENV
       apt:
@@ -26,10 +38,13 @@
         update_cache: true
 
     - name: Set fixed IP
-      ansible.builtin.script: ./res/set_ip.sh {{ STATIC_NODE_IP }} {{ ROUTER_IP }} {{ LOCAL_INTERFACE }} {{ groups['k3s.dataend_config'].index(inventory_hostname) }}
+      shell: echo "interface {{ LOCAL_INTERFACE }}\nstatic ip_address={{ DB_HOST }}\nstatic routers={{ ROUTER_IP }}\nstatic domain_name_servers=8.8.8.8" >> /etc/dhcpcd.conf
 
     - name: Get Github user SSH public keys
-      shell: curl "https://api.github.com/users/{{ GITHUB_USER }}/keys" | jq -r '.[].key' >> ~/.ssh/authorized_keys
+      shell: curl "https://api.github.com/users/{{ GITHUB_USER }}/keys" | jq -r '.[].key' >> /home/pi/.ssh/authorized_keys
 
     - name: Disable SSH password
       shell: sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+
+    - name: Reboot
+      reboot:
