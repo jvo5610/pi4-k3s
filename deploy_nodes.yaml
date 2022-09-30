@@ -19,3 +19,4 @@
 
     - name: Deploy k3s
       shell: curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="mysql://{{ DB_USER }}:{{ DB_PASS }}@tcp({{ DB_HOST }}:3306)/{{ DB_NAME }} --token {{K3S_TOKEN.stdout}}"
+      
